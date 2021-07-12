@@ -10,3 +10,5 @@ git submodule add -b "14.0" https://github.com/OCA/web.git
 git submodule add -b "14.0" https://github.com/OCA/project.git
 ...
 ```
+
+This is a test
