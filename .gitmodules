@@ -1,0 +1,164 @@
+[submodule "src/OCA/web"]
+	path = src/OCA/web
+	url = https://github.com/OCA/web.git
+	branch = 14.0
+[submodule "src/OCA/OCB"]
+	path = src/OCA/OCB
+	url = https://github.com/OCA/OCB.git
+	branch = 14.0
+[submodule "src/OCA/project"]
+	path = src/OCA/project
+	url = https://github.com/OCA/project.git
+	branch = 14.0
+[submodule "src/OCA/server-tools"]
+	path = src/OCA/server-tools
+	url = https://github.com/OCA/server-tools.git
+	branch = 14.0
+[submodule "src/OCA/crm"]
+	path = src/OCA/crm
+	url = https://github.com/OCA/crm.git
+	branch = 14.0
+[submodule "src/OCA/product-attribute"]
+	path = src/OCA/product-attribute
+	url = https://github.com/OCA/product-attribute.git
+	branch = 14.0
+[submodule "src/OCA/hr-attendance"]
+	path = src/OCA/hr-attendance
+	url = https://github.com/OCA/hr-attendance.git
+	branch = 14.0
+[submodule "src/OCA/social"]
+	path = src/OCA/social
+	url = https://github.com/OCA/social.git
+	branch = 14.0
+[submodule "src/OCA/bank-payment"]
+	path = src/OCA/bank-payment
+	url = https://github.com/OCA/bank-payment.git
+	branch = 14.0
+[submodule "src/OCA/account-payment"]
+	path = src/OCA/account-payment
+	url = https://github.com/OCA/account-payment.git
+	branch = 14.0
+[submodule "src/OCA/sale-workflow"]
+	path = src/OCA/sale-workflow
+	url = https://github.com/OCA/sale-workflow.git
+	branch = 14.0
+[submodule "src/OCA/server-ux"]
+	path = src/OCA/server-ux
+	url = https://github.com/OCA/server-ux.git
+	branch = 14.0
+[submodule "src/OCA/rest-framework"]
+	path = src/OCA/rest-framework
+	url = https://github.com/OCA/rest-framework.git
+	branch = 14.0
+[submodule "src/OCA/account-financial-tools"]
+	path = src/OCA/account-financial-tools
+	url = https://github.com/OCA/account-financial-tools.git
+	branch = 14.0
+[submodule "src/OCA/partner-contact"]
+	path = src/OCA/partner-contact
+	url = https://github.com/OCA/partner-contact.git
+	branch = 14.0
+[submodule "src/OCA/helpdesk"]
+	path = src/OCA/helpdesk
+	url = https://github.com/OCA/helpdesk.git
+	branch = 14.0
+[submodule "src/OCA/contract"]
+	path = src/OCA/contract
+	url = https://github.com/OCA/contract.git
+	branch = 14.0
+[submodule "src/OCA/account-invoicing"]
+	path = src/OCA/account-invoicing
+	url = https://github.com/OCA/account-invoicing.git
+	branch = 14.0
+[submodule "src/OCA/queue"]
+	path = src/OCA/queue
+	url = https://github.com/OCA/queue.git
+	branch = 14.0
+[submodule "src/OCA/bank-statement-import"]
+	path = src/OCA/bank-statement-import
+	url = https://github.com/OCA/bank-statement-import.git
+	branch = 14.0
+[submodule "src/OCA/product-variant"]
+	path = src/OCA/product-variant
+	url = https://github.com/OCA/product-variant.git
+	branch = 14.0
+[submodule "src/OCA/account-financial-reporting"]
+	path = src/OCA/account-financial-reporting
+	url = https://github.com/OCA/account-financial-reporting.git
+	branch = 14.0
+[submodule "src/OCA/server-auth"]
+	path = src/OCA/server-auth
+	url = https://github.com/OCA/server-auth.git
+	branch = 14.0
+[submodule "src/OCA/server-backend"]
+	path = src/OCA/server-backend
+	url = https://github.com/OCA/server-backend.git
+	branch = 14.0
+[submodule "src/OCA/server-env"]
+	path = src/OCA/server-env
+	url = https://github.com/OCA/server-env.git
+	branch = 14.0
+[submodule "src/OCA/account-invoice-reporting"]
+	path = src/OCA/account-invoice-reporting
+	url = https://github.com/OCA/account-invoice-reporting.git
+	branch = 14.0
+[submodule "src/OCA/reporting-engine"]
+	path = src/OCA/reporting-engine
+	url = https://github.com/OCA/reporting-engine.git
+	branch = 14.0
+[submodule "src/OCA/website"]
+	path = src/OCA/website
+	url = https://github.com/OCA/website.git
+	branch = 14.0
+[submodule "src/OCA/account-analytic"]
+	path = src/OCA/account-analytic
+	url = https://github.com/OCA/account-analytic.git
+	branch = 14.0
+[submodule "src/OCA/timesheet"]
+	path = src/OCA/timesheet
+	url = https://github.com/OCA/timesheet.git
+	branch = 14.0
+[submodule "src/OCA/connector"]
+	path = src/OCA/connector
+	url = https://github.com/OCA/connector.git
+	branch = 14.0
+[submodule "src/OCA/account-closing"]
+	path = src/OCA/account-closing
+	url = https://github.com/OCA/account-closing.git
+	branch = 14.0
+[submodule "src/OCA/hr"]
+	path = src/OCA/hr
+	url = https://github.com/OCA/hr.git
+	branch = 14.0
+[submodule "src/OCA/community-data-files"]
+	path = src/OCA/community-data-files
+	url = https://github.com/OCA/community-data-files.git
+	branch = 14.0
+[submodule "src/OCA/currency"]
+	path = src/OCA/currency
+	url = https://github.com/OCA/currency.git
+	branch = 14.0
+[submodule "src/OCA/mis-builder"]
+	path = src/OCA/mis-builder
+	url = https://github.com/OCA/mis-builder.git
+	branch = 14.0
+[submodule "src/OCA/hr-holidays"]
+	path = src/OCA/hr-holidays
+	url = https://github.com/OCA/hr-holidays.git
+	branch = 14.0
+[submodule "src/OCA/project-reporting"]
+	path = src/OCA/project-reporting
+	url = https://github.com/OCA/project-reporting.git
+	branch = 14.0
+[submodule "src/OCA/account-reconcile"]
+	path = src/OCA/account-reconcile
+	url = https://github.com/OCA/account-reconcile.git
+	branch = 14.0
+[submodule "src/OCA/calendar"]
+	path = src/OCA/calendar
+	url = https://github.com/OCA/calendar.git
+	branch = 14.0
+[submodule "src/OCA/search-engine"]
+	path = src/OCA/search-engine
+	url = https://github.com/OCA/search-engine.git
+	branch = 14.0

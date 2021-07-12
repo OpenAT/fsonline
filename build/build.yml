@@ -1,0 +1,10 @@
+# Build configuration for odoo
+# ATTENTION: All paths must be relative to the project root!
+odoo:
+  odoo_src: src/OCA/OCB
+  odoo_tgt: build/odoo
+  addons_src:
+    - src/OCA/web/*
+    - src/OCA/project/*
+  addons_tgt: build/odoo/addons
+  addons_to_install: []
