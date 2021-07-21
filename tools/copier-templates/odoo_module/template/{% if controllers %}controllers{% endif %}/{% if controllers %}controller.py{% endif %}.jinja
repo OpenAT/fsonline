@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+
+from odoo import http
+from odoo.http import request
+
+
+class MyControllerController(http.Controller):
+
+    @http.route('/my/route', auth='user', type='json')
+    def my_route(self):
+        """ Description """
+
+        return {}

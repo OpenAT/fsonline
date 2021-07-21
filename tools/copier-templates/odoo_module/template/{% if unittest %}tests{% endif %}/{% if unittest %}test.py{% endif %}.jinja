@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+
+from odoo.tests import common #, tagged
+# from odoo.exceptions import UserError, ValidationError
+
+
+# @tagged('post_install', '-at_install')
+class TestMyModel(common.TransactionCase):
+
+    def test_my_assumption(self):
+        expected = True
+        actual = False
+        self.assertEqual(actual, expected)

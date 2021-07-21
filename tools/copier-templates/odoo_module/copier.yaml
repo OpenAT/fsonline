@@ -1,0 +1,96 @@
+_templates_suffix: .jinja
+
+_envops:
+  autoescape: false
+  block_end_string: "%}"
+  block_start_string: "{%"
+  comment_end_string: "#}"
+  comment_start_string: "{#"
+  keep_trailing_newline: true
+  variable_end_string: "}}"
+  variable_start_string: "{{"
+
+_exclude:
+  - .empty
+
+_subdirectory: template
+
+name:
+  type: str
+  help: "The pretty module name"
+
+summary:
+  type: str
+  default: ""
+  help: "Short description of the module"
+
+description:
+  type: str
+  default: ""
+  help: "Long description of the module"
+
+author:
+  type: str
+  default: "DataDialog"
+  help: "Who developed this module?"
+
+website:
+  type: str
+  default: "https://www.datadialog.net"
+  help: "Module or author website"
+
+category:
+  type: str
+  default: "Uncategorized"
+  help: "What category should the module be in?"
+
+version:
+  type: str
+  default: "0.1"
+  help: "Module version"
+
+models:
+  type: bool
+  when: "{% if addon_type == 'custom' %}true{% endif %}"
+  default: false
+  help: "Do you want models?"
+
+views:
+  type: bool
+  default: false
+  help: "Do you want views?"
+
+security:
+  type: bool
+  default: false
+  help: "Do you want security?"
+
+data:
+  type: bool
+  default: false
+  help: "Do you want data?"
+
+i18n:
+  type: bool
+  default: false
+  help: "Do you want internationalization?"
+
+controllers:
+  type: bool
+  default: false
+  help: "Do you want controllers?"
+
+static:
+  type: bool
+  default: false
+  help: "Do you want static assets?"
+
+demo:
+  type: bool
+  default: false
+  help: "Do you want demo data?"
+
+unittest:
+  type: bool
+  default: false
+  help: "Do you want to unit test?"

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_addon_viewname_form">
+        <field name="name">My Model</field>
+        <field name="model">my.model</field>
+        <field name="arch" type="xml">
+            <form string="My Model">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_addon_viewname_tree">
+        <field name="name">My Model</field>
+        <field name="model">my.model</field>
+        <field name="arch" type="xml">
+            <tree string="My Model">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_addon_viewname_search">
+        <field name="name">my.model.search</field>
+        <field name="model">my.model</field>
+        <field name="arch" type="xml">
+            <search string="My Model">
+                <field name="name" string="Model name"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_addon_viewname_form">
+        <field name="name">My Model</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">my.model</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

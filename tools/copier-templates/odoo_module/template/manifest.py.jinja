@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+{
+    'name': '{{ name }}',
+    'summary': '{{ summary }}',
+    'description': """
+{{ description }}
+    """,
+    'author': '{{ author }}',
+    'website': '{{ website }}',
+    'category': '{{ category }}',
+    'version': '{{ version }}',
+    'depends': [
+        # 'addon',
+    ],
+    'data': [
+        {%- if data %}
+        # 'data/file.xml',{% endif %}
+        {%- if views %}
+        'views/views.xml',{% endif %}
+        {%- if security %}
+        # 'security/file.csv',{% endif %}
+    ],
+    {%- if demo %}
+    'demo': [
+        # 'demo/file.xml',
+    ],{% endif %}
+    {%- if static %}
+    'js': [
+        # 'static/src/js/file.js',
+    ],
+    'qweb': [
+        # 'static/src/xml/file.xml',
+    ],
+    'css': [
+        # 'static/src/css/file.css',
+    ],{% endif %}
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+    # 'post_init'hook': 'post_init_hook',
+}
