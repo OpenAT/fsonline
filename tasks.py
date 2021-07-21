@@ -223,3 +223,63 @@ def build_odoo(c, copy_files=False):
             addon_target = ADDONS_TGT / addon_name
             relative_source = Path(os.path.relpath(addon_src_path, start=addon_target.parent))
             addon_target.symlink_to(relative_source)
+
+def print_bullet(s):
+    print("  * %s" % s)
+
+def print_command(s):
+    print("      RUN: %s" % s)
+
+def print_create_addon_help():
+    print()
+    print("Usage: invoke create-addon <parameters>")
+    print()
+    print("  --name <name>     The directory name of the module")
+    print("  --core            Create a core module instead of an instance module")
+    print("  --minimal         Create a minimalist module.")
+    print()
+    print("Testing:")
+    print()
+    print("  --preview         Do a dry run for testing.")
+    print()
+
+@task
+def create_addon(c, name=None, preview=False, core=False, minimal=False):
+    """ Create a new Odoo 14 module """
+
+    if not name:
+        print_create_addon_help()
+        return
+
+    # TODO: Use correct path
+    source = "tools/copier-templates/odoo_module"
+    # TODO: Use correct path
+    destination = "src/addons/%s" % name
+
+    if not core:
+        # TODO: Use correct path
+        destination = "addons/%s" % name 
+
+    print("Creating new %s addon \"%s\"..." % ("core" if core else "instance", name))
+
+    args = ""
+
+    if minimal:
+        args = args + \
+            " -d models=False" + \
+            " -d models=False" + \
+            " -d views=False" + \
+            " -d security=False" + \
+            " -d data=False" + \
+            " -d i18n=False" + \
+            " -d controllers=False" + \
+            " -d static=False" + \
+            " -d demo=False" + \
+            " -d unittest=False"
+
+    print_bullet("Copier: %s --> %s" % (source, destination))
+
+    if preview:
+        print_command("copier %s %s %s" % (source, destination, args))
+    else:
+        c.run("copier %s %s %s" % (source, destination, args))
