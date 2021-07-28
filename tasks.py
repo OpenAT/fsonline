@@ -263,10 +263,7 @@ def create_addon(c, name=None, preview=False, core=False, minimal=False):
     source = (FSO_ENV.tools_path /
              "copier-templates" /
              "odoo_module").absolute()
-    destination = (FSO_ENV.core_path /
-                  "src" /
-                  "addons" /
-                  name).absolute()
+    destination = FSO_ENV.core_addons_path.absolute()
 
     # Force core addon, if we're not in an instance repo
     if not FSO_ENV.is_instance:
@@ -274,9 +271,7 @@ def create_addon(c, name=None, preview=False, core=False, minimal=False):
         core = True
 
     if not core:
-        destination = (FSO_ENV.instance_path /
-                      "addons" /
-                      name).absolute()
+        destination = FSO_ENV.insatnce_addons_path.absolute()
 
     print("Creating new %s addon \"%s\"..." % (FSO_ENV.name, name))
 

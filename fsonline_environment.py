@@ -16,11 +16,19 @@ class FsonlineEnvironment():
     # Environment properties
     name = "core"
     is_instance = False
+    
+    # Core and tools
     core_path = SCRIPT_PATH
-    instance_path = None
+    core_addons_path = core_path / "src" / "addons"
     tools_path = core_path / "tools"
 
+    # Instance
+    instance_path = None
+    insatnce_addons_path = None
+
     def __init__(self) -> None:
+        """ Create a new FS-Online environment. """
+
         assert (self.SCRIPT_PATH / self.CORE_MARKER).is_file(), \
             u"ERROR: Script root had no %s file marker." % self.CORE_MARKER
 
@@ -30,5 +38,8 @@ class FsonlineEnvironment():
             self.use_instance_paths()
 
     def use_instance_paths(self):
+        """ Prepares all instance specific directories. """
+
         self.instance_path = Path(self.SCRIPT_PATH).parent
+        self.insatnce_addons_path = self.instance_path / "addons"
         self.tools_path = self.instance_path / "fsonline" / "tools"
