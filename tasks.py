@@ -73,38 +73,6 @@ def log_time(func):
     return wrapper
 
 
-def validate_odoo_build_file_paths(odoo_build_file):
-    """ Validate the paths in the odoo build file
-
-        - ensure all paths are relative
-        - ensure no paths point to "/"
-    """
-    # TODO: Upgrade this with pathlib commands ;)
-    odoo_build_yml = yaml.safe_load(odoo_build_file.read_text())
-    odoo_cfg = odoo_build_yml["odoo"]
-
-    odoo_cfg_keys_to_check = ("odoo_src", "odoo_tgt", "addons_src", "addons_tgt")
-
-    paths_to_check = []
-    for key in odoo_cfg_keys_to_check:
-        val = odoo_cfg[key]
-        if isinstance(val, str):
-            paths_to_check.append(val)
-        elif isinstance(val, list):
-            paths_to_check += val
-        else:
-            raise TypeError(u"val must be of type string or list! {}".format(val))
-
-    for path in paths_to_check:
-        assert not path.startswith('/'), "Config path is not relative {}".format(path)
-        assert len(path) >= 3, "Config path is too short {}".format(path)
-
-    assert any(p.startswith('build/') for p in (odoo_cfg["odoo_tgt"], odoo_cfg["addons_tgt"])), (
-        u"The build targets must start with 'build/' !")
-
-    return True
-
-
 def find_addons(search_paths, manifest="__manifest__.py"):
     """ Returns a set of addon paths
 
@@ -157,27 +125,6 @@ def symlink_files_relative(src_folder, tgt_folder):
             target.symlink_to(relative_source)
 
 
-# Global Variables
-# ----------------
-# https://realpython.com/python-pathlib/
-
-TASK_ROOT = FSO_ENV.core_path.absolute()
-PROJECT_ROOT = TASK_ROOT
-
-if FSO_ENV.is_instance:
-    PROJECT_ROOT = FSO_ENV.instance_path.absolute()
-
-BUILD_FILE = TASK_ROOT / "build" / "build.yml"
-validate_odoo_build_file_paths(BUILD_FILE)
-
-CFG = yaml.safe_load(BUILD_FILE.read_text())
-CFG_ODOO = CFG["odoo"]
-
-ODOO_SRC = TASK_ROOT / CFG_ODOO["odoo_src"]
-ODOO_TGT = TASK_ROOT / CFG_ODOO["odoo_tgt"]
-ADDONS_TGT = TASK_ROOT / CFG_ODOO["addons_tgt"]
-
-
 # Tasks
 # -----
 @task
@@ -186,58 +133,58 @@ def build_odoo(c, copy_files=False):
 
     This will copy the odoo and addons source files from the submodules to the build folder
     """
-    # Check that the odoo src path exists
-    if not ODOO_SRC.is_dir():
-        raise OdooSourceError(u"Odoo source not found at {}".format(ODOO_SRC))
 
     # odoo and odoo-addons locations
-    odoo_odoo_src = ODOO_SRC / 'odoo'
-    odoo_odoo_addons_src = ODOO_SRC / "odoo" / "addons"
-    odoo_addons_src = ODOO_SRC / "addons"
+    odoo_odoo_src = FSO_ENV.odoo_source
+    odoo_odoo_addons_src = FSO_ENV.odoo_source / "odoo" / "addons"
+    odoo_addons_src = FSO_ENV.odoo_source / "addons"
 
     # addon search paths
     odoo_odoo_addons_search_path = [odoo_odoo_addons_src / "*"]
     odoo_addons_search_path = [odoo_addons_src / "*"]
-    extra_addons_search_paths = [TASK_ROOT / p for p in CFG_ODOO["addons_src"]]
+    extra_addons_search_paths = FSO_ENV.extra_addons_sources
 
     # Clear the build locations
-    build_paths = (ODOO_TGT, ADDONS_TGT)
+    build_paths = (FSO_ENV.odoo_target, FSO_ENV.addons_target)
     for build_path in build_paths:
-        build_path_root = TASK_ROOT / "build"
+        build_path_root = FSO_ENV.build_path
         assert build_path_root in build_path.parents, "Build path {} must be in {}".format(build_path, build_path_root)
         if os.path.isdir(build_path):
             shutil.rmtree(build_path)
 
     # Copy files and folders
     if copy_files:
-        shutil.copytree(odoo_odoo_src, ODOO_TGT, symlinks=True)
+        shutil.copytree(odoo_odoo_src, FSO_ENV.odoo_target, symlinks=True)
         addon_folders = find_addons(odoo_addons_search_path + extra_addons_search_paths)
         for addon, addon_src_path in addon_folders.items():
-            addon_tgt_path = ADDONS_TGT / addon
+            addon_tgt_path = FSO_ENV.addons_target / addon
             shutil.copytree(addon_src_path, addon_tgt_path, symlinks=True)
 
     # Symlink files and folder
     else:
-        ODOO_TGT.mkdir()
-        ADDONS_TGT.mkdir()
-        symlink_files_relative(odoo_odoo_src, ODOO_TGT)
-        symlink_files_relative(odoo_odoo_addons_src, ADDONS_TGT)
+        FSO_ENV.odoo_target.mkdir()
+        FSO_ENV.addons_target.mkdir()
+        symlink_files_relative(odoo_odoo_src, FSO_ENV.odoo_target)
+        symlink_files_relative(odoo_odoo_addons_src, FSO_ENV.addons_target)
         for source in odoo_odoo_src.iterdir():
             if source.is_dir() and source.name != 'addons':
-                target = ODOO_TGT / source.name
+                target = FSO_ENV.odoo_target / source.name
                 rel_src = Path(os.path.relpath(source, start=target.parent))
                 target.symlink_to(rel_src)
         addon_folders = find_addons(odoo_odoo_addons_search_path + odoo_addons_search_path + extra_addons_search_paths)
         for addon_name, addon_src_path in addon_folders.items():
-            addon_target = ADDONS_TGT / addon_name
+            addon_target = FSO_ENV.addons_target / addon_name
             relative_source = Path(os.path.relpath(addon_src_path, start=addon_target.parent))
             addon_target.symlink_to(relative_source)
+
 
 def print_bullet(s):
     print("  * %s" % s)
 
+
 def print_command(s):
     print("      RUN: %s" % s)
+
 
 def print_create_addon_help():
     print("""
@@ -251,6 +198,7 @@ Testing:
 
   --preview         Do a dry run for testing.
 """)
+
 
 @task
 def create_addon(c, name=None, preview=False, core=False, minimal=False):
