@@ -127,6 +127,13 @@ def symlink_files_relative(src_folder, tgt_folder):
 
 # Tasks
 # -----
+
+@task
+def init(c):
+    """ Initialize the development environment. """
+    c.run("git submodule update --init --recursive")
+    print("Done.")
+
 @task
 def build_odoo(c, copy_files=False):
     """ Build the odoo source files
