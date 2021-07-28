@@ -12,6 +12,14 @@ from invoke.util import yaml
 from functools import wraps
 import time
 
+# We don't know yet, if we're in an instance or core repo,
+# so try importing from the other, if the first fails
+try:
+    from .fsonline_environment import FsonlineEnvironment
+except:
+    from fsonline_environment import FsonlineEnvironment
+
+FSO_ENV = FsonlineEnvironment()
 
 # Configure Logging
 # -----------------
@@ -152,21 +160,22 @@ def symlink_files_relative(src_folder, tgt_folder):
 # Global Variables
 # ----------------
 # https://realpython.com/python-pathlib/
-PROJECT_ROOT = Path(__file__).parent.absolute()
-assert str(PROJECT_ROOT) != '/' \
-       and (PROJECT_ROOT / '.git').is_dir() \
-       and len(PROJECT_ROOT.parts) >= 3, \
-       u"PROJECT_ROOT Error! {}".format(PROJECT_ROOT)
 
-BUILD_FILE = PROJECT_ROOT / "build" / "build.yml"
+TASK_ROOT = FSO_ENV.core_path.absolute()
+PROJECT_ROOT = TASK_ROOT
+
+if FSO_ENV.is_instance:
+    PROJECT_ROOT = FSO_ENV.instance_path.absolute()
+
+BUILD_FILE = TASK_ROOT / "build" / "build.yml"
 validate_odoo_build_file_paths(BUILD_FILE)
 
 CFG = yaml.safe_load(BUILD_FILE.read_text())
 CFG_ODOO = CFG["odoo"]
 
-ODOO_SRC = PROJECT_ROOT / CFG_ODOO["odoo_src"]
-ODOO_TGT = PROJECT_ROOT / CFG_ODOO["odoo_tgt"]
-ADDONS_TGT = PROJECT_ROOT / CFG_ODOO["addons_tgt"]
+ODOO_SRC = TASK_ROOT / CFG_ODOO["odoo_src"]
+ODOO_TGT = TASK_ROOT / CFG_ODOO["odoo_tgt"]
+ADDONS_TGT = TASK_ROOT / CFG_ODOO["addons_tgt"]
 
 
 # Tasks
@@ -189,12 +198,12 @@ def build_odoo(c, copy_files=False):
     # addon search paths
     odoo_odoo_addons_search_path = [odoo_odoo_addons_src / "*"]
     odoo_addons_search_path = [odoo_addons_src / "*"]
-    extra_addons_search_paths = [PROJECT_ROOT / p for p in CFG_ODOO["addons_src"]]
+    extra_addons_search_paths = [TASK_ROOT / p for p in CFG_ODOO["addons_src"]]
 
     # Clear the build locations
     build_paths = (ODOO_TGT, ADDONS_TGT)
     for build_path in build_paths:
-        build_path_root = PROJECT_ROOT / "build"
+        build_path_root = TASK_ROOT / "build"
         assert build_path_root in build_path.parents, "Build path {} must be in {}".format(build_path, build_path_root)
         if os.path.isdir(build_path):
             shutil.rmtree(build_path)
@@ -231,36 +240,45 @@ def print_command(s):
     print("      RUN: %s" % s)
 
 def print_create_addon_help():
-    print()
-    print("Usage: invoke create-addon <parameters>")
-    print()
-    print("  --name <name>     The directory name of the module")
-    print("  --core            Create a core module instead of an instance module")
-    print("  --minimal         Create a minimalist module.")
-    print()
-    print("Testing:")
-    print()
-    print("  --preview         Do a dry run for testing.")
-    print()
+    print("""
+Usage: invoke create-addon <parameters>
+
+  --name <name>     The directory name of the addonn
+  --core            Create a core addon instead of an instance addon
+  --minimal         Create a minimalist addon.
+
+Testing:
+
+  --preview         Do a dry run for testing.
+""")
 
 @task
 def create_addon(c, name=None, preview=False, core=False, minimal=False):
-    """ Create a new Odoo 14 module """
+    """ Create a new Odoo 14 addon """
 
     if not name:
         print_create_addon_help()
         return
 
-    # TODO: Use correct path
-    source = "tools/copier-templates/odoo_module"
-    # TODO: Use correct path
-    destination = "src/addons/%s" % name
+    source = (FSO_ENV.tools_path /
+             "copier-templates" /
+             "odoo_module").absolute()
+    destination = (FSO_ENV.core_path /
+                  "src" /
+                  "addons" /
+                  name).absolute()
+
+    # Force core addon, if we're not in an instance repo
+    if not FSO_ENV.is_instance:
+        print("You are not in an instance repository, creating a core module.")
+        core = True
 
     if not core:
-        # TODO: Use correct path
-        destination = "addons/%s" % name 
+        destination = (FSO_ENV.instance_path /
+                      "addons" /
+                      name).absolute()
 
-    print("Creating new %s addon \"%s\"..." % ("core" if core else "instance", name))
+    print("Creating new %s addon \"%s\"..." % (FSO_ENV.name, name))
 
     args = ""
 
