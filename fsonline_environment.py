@@ -42,23 +42,31 @@ class FsonlineEnvironment():
     def __init__(self) -> None:
         """ Create a new FS-Online environment. """
 
-        assert (self.SCRIPT_PATH / self.CORE_MARKER).is_file(), \
-            "ERROR: Script root had no %s file marker." % self.CORE_MARKER
-
+        self.validate_core_marker()
         self.setup_build()
         self.setup_instance()
 
 
+    def validate_core_marker(self):
+        assert (self.SCRIPT_PATH / self.CORE_MARKER).is_file(), \
+            "ERROR: Script root had no %s file marker." % self.CORE_MARKER
+        return True
+
+
     def setup_build(self):
-        """ Prepares all build specific properties. """
+        """ Prepares and validates all build specific properties. """
 
         self.build_config = yaml.safe_load(
             self.build_config_file.read_text())
         
         self.odoo_config = self.build_config["odoo"]
         self.validate_odoo_config(self.odoo_config)
+        self.setup_odoo_paths()
 
-        # Read source and target paths, check if they exist
+
+    def setup_odoo_paths(self):
+        """ Prepares and validates various Odoo specific path properties. """
+
         check_build_config_hint = "Check build configuration at {}".format(self.build_config_file)
 
         self.odoo_source = self.core_path / self.odoo_config["odoo_src"]
@@ -88,7 +96,7 @@ class FsonlineEnvironment():
 
 
     def setup_instance(self):
-        """ Prepares all instance specific properties. """
+        """ Prepares and validates all instance specific properties. """
 
         if not (self.SCRIPT_PATH.parent / self.INSTANCE_MARKER).is_file():
             return
@@ -103,12 +111,13 @@ class FsonlineEnvironment():
 
     @staticmethod
     def validate_path(path, fail_message, hint):
+        """ Validates a given path and uses fail_messsage and hint on failure. """
         assert path.is_dir(), "{} {}{}".format(fail_message, path, "\n{}".format(hint) if hint else None)
 
 
     @staticmethod
     def validate_path_pattern(path, fail_message, hint):
-        """ Removes the * parts from a path and checks if its a directory. """
+        """ Removes the pattern parts from a path and checks if its a directory. """
 
         while "*" in path.name:
             path = path.parent
