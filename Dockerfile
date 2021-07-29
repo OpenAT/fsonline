@@ -42,7 +42,10 @@ RUN apt-get -qq update \
 
 VOLUME ["/opt/odoo"]
 WORKDIR /opt/odoo
-# Do more stuff
+# Entrypoint does not seem to work at all even though the location etc.
+# is right. After some research, it seems that symbolic links are a
+# pita in docker:
+# https://stackoverflow.com/questions/38485607/mount-host-directory-with-a-symbolic-link-inside-in-docker-container
 ENTRYPOINT ["python3", "/opt/odoo/odoo-bin"]
 
 
