@@ -135,7 +135,7 @@ def init(c):
     print("Done.")
 
 @task
-def build_odoo(c, copy_files=False):
+def build(c, copy_files=False):
     """ Build the odoo source files
 
     This will copy the odoo and addons source files from the submodules to the build folder
@@ -183,6 +183,17 @@ def build_odoo(c, copy_files=False):
             addon_target = FSO_ENV.addons_target / addon_name
             relative_source = Path(os.path.relpath(addon_src_path, start=addon_target.parent))
             addon_target.symlink_to(relative_source)
+
+    c.run("docker build -t fsonline-odoo fsonline")
+
+
+@task
+def start(c):
+    """ Start a temporary fsonline-odoo container. """
+
+    print("Starting temporary container...")
+    odoo_mount_dir = FSO_ENV.build_path / "odoo"
+    c.run("docker run --rm -v {}:/opt/odoo fsonline-odoo:latest".format(odoo_mount_dir))
 
 
 def print_bullet(s):
