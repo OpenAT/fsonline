@@ -38,3 +38,9 @@ pretty_name:
 description:
   type: str
   help: Short description
+
+model_fields:
+  type: yaml
+  help: |
+    Fields? {field: type, field: type}
+    Types: Boolean, Char, Date, Float, Integer, Selection, Text

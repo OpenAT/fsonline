@@ -8,8 +8,8 @@
             <form string="{{ pretty_name }}">
                 <sheet>
                     <group>
-                        <!-- TODO -->
-                        <field name="name" />
+                        {%- for field in model_fields %}
+                        <field name="{{ field }}" />{% endfor %}
                     </group>
                 </sheet>
             </form>
@@ -21,8 +21,8 @@
         <field name="model">{{ model_name }}</field>
         <field name="arch" type="xml">
             <tree string="{{ pretty_name }}">
-                <!-- TODO -->
-                <field name="name" />
+                {%- for field in model_fields %}
+                <field name="{{ field }}" />{% endfor %}
             </tree>
         </field>
     </record>
@@ -32,8 +32,8 @@
         <field name="model">{{ model_name }}</field>
         <field name="arch" type="xml">
             <search string="{{ pretty_name }}">
-                <!-- TODO -->
-                <field name="name" string="Model name"/>
+                {%- for field in model_fields %}
+                <field name="{{ field }}" />{% endfor %}
             </search>
         </field>
     </record>
