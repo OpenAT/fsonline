@@ -195,15 +195,6 @@ def start(c):
     odoo_mount_dir = FSO_ENV.build_path / "odoo"
     c.run("docker run --rm -v {}:/opt/odoo fsonline-odoo:latest".format(odoo_mount_dir))
 
-
-def print_bullet(s):
-    print("  * %s" % s)
-
-
-def print_command(s):
-    print("      RUN: %s" % s)
-
-
 def print_create_addon_help():
     print("""
 Usage: invoke create-addon <parameters>
@@ -217,7 +208,6 @@ Testing:
   --preview         Do a dry run for testing.
 """)
 
-
 @task
 def create_addon(c, name=None, preview=False, core=False, minimal=False):
     """ Create a new Odoo 14 addon """
@@ -229,17 +219,15 @@ def create_addon(c, name=None, preview=False, core=False, minimal=False):
     source = (FSO_ENV.tools_path /
              "copier-templates" /
              "odoo_module").absolute()
-    destination = FSO_ENV.core_addons_path.absolute()
+    destination = (FSO_ENV.core_addons_path / name).absolute()
 
     # Force core addon, if we're not in an instance repo
     if not FSO_ENV.is_instance:
-        print("You are not in an instance repository, creating a core module.")
+        logger.info("You are not in an instance repository, creating a core module.")
         core = True
 
     if not core:
-        destination = FSO_ENV.insatnce_addons_path.absolute()
-
-    print("Creating new %s addon \"%s\"..." % (FSO_ENV.name, name))
+        destination = (FSO_ENV.instance_addons_path / name).absolute()
 
     args = ""
 
@@ -256,9 +244,4 @@ def create_addon(c, name=None, preview=False, core=False, minimal=False):
             " -d demo=False" + \
             " -d unittest=False"
 
-    print_bullet("Copier: %s --> %s" % (source, destination))
-
-    if preview:
-        print_command("copier %s %s %s" % (source, destination, args))
-    else:
-        c.run("copier %s %s %s" % (source, destination, args))
+    c.run("copier %s %s %s" % (source, destination, args))
