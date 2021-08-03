@@ -1,0 +1,40 @@
+_templates_suffix: .jinja
+
+_envops:
+  autoescape: false
+  block_end_string: "%}"
+  block_start_string: "{%"
+  comment_end_string: "#}"
+  comment_start_string: "{#"
+  keep_trailing_newline: true
+  variable_end_string: "}}"
+  variable_start_string: "{{"
+
+_exclude:
+  - .empty
+ 
+_subdirectory: template
+
+addon_name:
+  type: str
+  help: Addon name
+
+model_name:
+  type: str
+  help: Odoo model name
+
+inherit_from:
+  type: str
+  help: Base model, if empty, security will be added
+
+class_name:
+  type: str
+  help: Python class name
+
+pretty_name:
+  type: str
+  help: Human readable pretty name
+
+description:
+  type: str
+  help: Short description
