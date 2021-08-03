@@ -245,3 +245,41 @@ def create_addon(c, name=None, preview=False, core=False, minimal=False):
             " -d unittest=False"
 
     c.run("copier %s %s %s" % (source, destination, args))
+
+@task
+def create_model(c, addon=None, core=False):
+    location_info = "instance"
+    destination_path = FSO_ENV.instance_addons_path / addon
+
+    if not FSO_ENV.is_instance or core:
+        location_info = "core"
+        destination_path = FSO_ENV.core_addons_path / addon
+
+    destination = destination_path.absolute()
+
+    # Validation
+    if not destination_path.is_dir():
+        logger.error("Destination is not a directory: {}".format(destination))
+        return
+        
+    if not (destination_path / "manifest.py").is_file():
+        logger.error("Did not find an addon manifest in: {}".format(destination))
+        return
+
+    # Run the template
+    logger.info("Creating new model in {} addon {}".format(location_info, addon))
+
+    source = (FSO_ENV.tools_path /
+             "copier-templates" /
+             "odoo_model").absolute()
+
+    args = "-d addon_name={}".format(addon)
+    copier_command = "copier {} {} {}".format(source, destination, args)
+    c.run(copier_command)
+
+    # If invoke dry run, dry run copier
+    if c.config.run.dry:
+        logger.info("Running copier in dry mode")
+        c.config.run.dry = False # Temp disable dry run
+        c.run("{} --pretend".format(copier_command))
+        c.config.run.dry = True # restore, for safety
