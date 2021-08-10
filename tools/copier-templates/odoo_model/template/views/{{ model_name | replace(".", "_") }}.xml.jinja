@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_{{ addon_name }}_{{ model_name | replace(".", "_") }}_form">
+        <field name="name">{{ pretty_name }}</field>
+        <field name="model">{{ model_name }}</field>
+        <field name="arch" type="xml">
+            <form string="{{ pretty_name }}">
+                <sheet>
+                    <group>
+                        {%- for field in model_fields %}
+                        <field name="{{ field }}" />{% endfor %}
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_{{ addon_name }}_{{ model_name | replace(".", "_") }}_tree">
+        <field name="name">{{ pretty_name }}</field>
+        <field name="model">{{ model_name }}</field>
+        <field name="arch" type="xml">
+            <tree string="{{ pretty_name }}">
+                {%- for field in model_fields %}
+                <field name="{{ field }}" />{% endfor %}
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_{{ addon_name }}_{{ model_name | replace(".", "_") }}_search">
+        <field name="name">{{ model_name }}.search</field>
+        <field name="model">{{ model_name }}</field>
+        <field name="arch" type="xml">
+            <search string="{{ pretty_name }}">
+                {%- for field in model_fields %}
+                <field name="{{ field }}" />{% endfor %}
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_{{ addon_name }}_{{ model_name | replace(".", "_") }}_form">
+        <field name="name">{{ pretty_name }}</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">{{ model_name }}</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

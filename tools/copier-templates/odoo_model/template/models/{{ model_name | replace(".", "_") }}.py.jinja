@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+
+from odoo import fields, models
+
+
+class {{ class_name }}(models.Model):
+    name = "{{ model_name }}"
+    {%- if inherit_from %}
+    _inherit = "{{ inherit_from }}"{% endif %}
+    _description = "{{ description }}"
+{% for field in model_fields %}
+    {{ field }} = fields.{{ model_fields[field] }}(){% endfor %}
