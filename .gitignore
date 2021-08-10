@@ -1,4 +1,8 @@
-/build/*
-!/build/build.yml
-
+.pytest_cache
+*.pyc
 .DS_Store
+
+/dev
+/stg
+/prd
+/*.local

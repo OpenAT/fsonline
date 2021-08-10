@@ -11,4 +11,10 @@ git submodule add -b "14.0" https://github.com/OCA/project.git
 ...
 ```
 
-This is a test
+## Setting the environment
+You can set/force the environment to use/load either by
+
+  1. explicitly setting the argument when creating the env (env="")
+  2. an environment variable called FSONLINE_ENVIRONMENT=""
+  3. an environment file called ".env" with FSONLINE_ENVIRONMENT="" in it
+  4. if none is given the default for env is "DEV"

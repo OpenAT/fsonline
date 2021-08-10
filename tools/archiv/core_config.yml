@@ -1,0 +1,10 @@
+# configuration to develop, build, configure and run odoo
+# ATTENTION: All paths must be relative to the file directory!
+odoo:
+  odoo_src: src/OCA/OCB
+  odoo_tgt: dev/odoo
+  addons_src:
+    - src/OCA/web/*
+    - src/OCA/project/*
+  addons_tgt: dev/odoo/addons
+  addons_to_install: []

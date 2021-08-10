@@ -38,7 +38,6 @@ class FsonlineEnvironment():
     instance_path = None
     insatnce_addons_path = None
 
-
     def __init__(self) -> None:
         """ Create a new FS-Online environment. """
 
@@ -46,12 +45,10 @@ class FsonlineEnvironment():
         self.setup_build()
         self.setup_instance()
 
-
     def validate_core_marker(self):
         assert (self.SCRIPT_PATH / self.CORE_MARKER).is_file(), \
             "ERROR: Script root had no %s file marker." % self.CORE_MARKER
         return True
-
 
     def setup_build(self):
         """ Prepares and validates all build specific properties. """
@@ -62,7 +59,6 @@ class FsonlineEnvironment():
         self.odoo_config = self.build_config["odoo"]
         self.validate_odoo_config(self.odoo_config)
         self.setup_odoo_paths()
-
 
     def setup_odoo_paths(self):
         """ Prepares and validates various Odoo specific path properties. """
@@ -94,7 +90,6 @@ class FsonlineEnvironment():
                 "Extra addons source not found at",
                 check_build_config_hint)
 
-
     def setup_instance(self):
         """ Prepares and validates all instance specific properties. """
 
@@ -108,12 +103,10 @@ class FsonlineEnvironment():
         self.insatnce_addons_path = self.instance_path / "addons"
         self.tools_path = self.instance_path / "fsonline" / "tools"
 
-
     @staticmethod
     def validate_path(path, fail_message, hint):
-        """ Validates a given path and uses fail_messsage and hint on failure. """
+        """ Validates a given path and uses fail_message and hint on failure. """
         assert path.is_dir(), "{} {}{}".format(fail_message, path, "\n{}".format(hint) if hint else None)
-
 
     @staticmethod
     def validate_path_pattern(path, fail_message, hint):
@@ -123,7 +116,6 @@ class FsonlineEnvironment():
             path = path.parent
     
         FsonlineEnvironment.validate_path(path, fail_message, hint)
-
 
     @staticmethod
     def validate_odoo_config(odoo_cfg):
