@@ -96,11 +96,8 @@ def find_addons(search_paths: List[Path], start_dir: Path = None, manifest="__ma
 #             target.symlink_to(relative_source)
 
 
-def symlink_rel(source: Path, target: Path, src_relative_to: Path, dry=False):
-    if src_relative_to:
-        rel_source = Path(os.path.relpath(source, src_relative_to))
-    else:
-        rel_source = source
+def symlink_rel(source: Path, target: Path, dry=False):
+    rel_source = Path(os.path.relpath(source, target.parent))
 
     logger.debug(f"Create symlink at '{target}' from '{rel_source}'")
     if not dry:

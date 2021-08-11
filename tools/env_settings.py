@@ -131,7 +131,18 @@ class CoreEnv(BaseSettings):
     core_addon_src: List[Path] = list()
 
     # COMPUTED SETTINGS
+    core_odoo_dir: Optional[DirectoryPath] = None
     core_addon_dirs: Optional[List[DirectoryPath]] = Field(env=None)
+
+    @validator('core_odoo_dir', always=True)
+    def v_core_odoo_dir(cls, v, values):
+        """ Compute and validate 'core_odoo_dir' """
+        v: Path = values['core_dir'] / values['core_odoo_src']
+        if not v.is_dir():
+            raise ValueError(f"core_odoo_dir {v} is missing or not a directory")
+        if not (v / 'odoo' / 'addons' / 'base').is_dir():
+            raise ValueError(f"odoo seems not to be in the core_odoo_dir {v}")
+        return v
 
     @validator('core_addon_dirs', always=True)
     def v_core_addon_dirs(cls, v, values):
