@@ -23,7 +23,7 @@ def init_submodules(c, in_path=None):
     """ Initialize all submodules recursively """
     e: FsonlineEnv = c['fsonline_env_settings']
     in_path: Path = in_path or e.repo_dir
-    c.run(f"git -C {in_path} submodule update --init --recursive")
+    c.run(f"git -C {in_path} submodule update --init --checkout --recursive")
 
 
 @task
@@ -90,7 +90,7 @@ def symlink_odoo(c, mode=0o770, clean=True, dry=False):
 
 @task(pre=[init_submodules, symlink_odoo], default=True)
 def init(c, env=''):
-    """ Prepare the repository folder for development:
+    """ Initialize the development environment
             - initialize submodules recursively
-            - symlink odoo in the [dev] folder
+            - symlink odoo and addons to the [dev_fson_tgt_dir] folder
     """
