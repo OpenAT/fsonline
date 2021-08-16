@@ -6,3 +6,6 @@
 /stg
 /prd
 /*.local
+
+# PyCharm user settings
+.idea
