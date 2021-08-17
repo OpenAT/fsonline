@@ -19,6 +19,12 @@ def create_addon(c, name, core=False, minimal=False):
     if core:
         target_dir = e.core_dir / "src" / "DADI" / name
 
+    if target_dir.exists():
+        target_files = [file for file in target_dir.glob("*.*")]
+        if target_files:
+            logger.error(f"Target addon directory is not empty, aborting. Directory: {target_dir}")
+            return
+
     args = ""
 
     if minimal:
