@@ -22,6 +22,9 @@ class CopierPostProcessing:
 
     @staticmethod
     def get_files(target_path: Path, dot_ext: str = "", ignore_files: List[str] = ()) -> List[Path]:
+        """ Gets a list of PosixPath for the files in a given path. Matches an optional
+        extension and ignores specified files. """
+
         pattern = f"{ Path('**') / f'*{dot_ext}'}"
         return [
             file.parent / file.name for file in target_path.glob(pattern)
@@ -30,6 +33,9 @@ class CopierPostProcessing:
 
     @staticmethod
     def ensure_file_has_lines(filename: Path, lines_to_add: List[str]) -> None:
+        """ Ensures the specified file contains all of the specified
+        lines. If the file does not exist, it will be created. """
+
         if not filename.exists():
             filename.touch()
 
@@ -45,6 +51,9 @@ class CopierPostProcessing:
                     file.write(missing_line)
 
     def get_entries(self, stem_only: bool, addon_sub_dir: str, dot_ext: str = "", ignore: List[str] = ()) -> List[str]:
+        """ Scans the specified addon sub dir for its files, and returns
+        them in a formatted list. """
+
         file_entries = self.get_files(
             self.addon_path / addon_sub_dir,
             dot_ext=dot_ext,
@@ -70,6 +79,9 @@ class CopierPostProcessing:
             security_entries)
 
     def modify_init_files(self, models: List[str]) -> None:
+        """ Alters addon and modules init files to include models.
+        if the models init file does not exist, it will be created. """
+
         _logger.info(f"Attempting to modify init files for models: {str(models)}")
         addon_init = Path(self.addon_path) / "__init__.py"
         models_init = Path(self.addon_path) / "models" / "__init__.py"
@@ -79,10 +91,14 @@ class CopierPostProcessing:
 
     @staticmethod
     def create_expression(tag: str) -> Pattern[AnyStr]:
+        """ Creates a RegEx that matches 'tag': [ ... ] """
+
         return re.compile(fr"(\"{tag}\"|'{tag}')\s*:\s\[\s*(.|\n)*\s*]",
                           re.RegexFlag.I or re.RegexFlag.M)
 
     def modify_manifest(self, data_files: List[str]) -> None:
+        """ Alters the addon manifest to include the specified resources. """
+
         _logger.info(f"Attempting to modify manifest for data files: {str(data_files)}")
         manifest_file = Path(self.addon_path) / "manifest.py"
 
