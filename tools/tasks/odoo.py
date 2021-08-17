@@ -1,5 +1,6 @@
 from invoke import task
 from tools.env_settings import FsonlineEnv
+from tools.template_post_processing import CopierPostProcessing
 import logging
 
 logger = logging.getLogger(__name__)
@@ -42,6 +43,7 @@ def create_addon(c, name, core=False, minimal=False):
     shell_command = f"copier \"{template_src}\" \"{target_dir}\" {args}"
     c.run(shell_command, pty=True)
 
+
 @task
 def create_model(c, addon, core=False):
     """ Create a new Odoo model """
@@ -71,5 +73,7 @@ def create_model(c, addon, core=False):
     if c.run(shell_command, pty=True):
         try:
             c.run(f"cp -r -n \"{tmp_target_dir}/.\" \"{target_dir}\"")
+            processor = CopierPostProcessing(target_dir)
+            processor.process()
         finally:
             c.run(f"rm -r \"{tmp_target_dir}\"")
