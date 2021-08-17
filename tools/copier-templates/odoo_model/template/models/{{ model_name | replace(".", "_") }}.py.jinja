@@ -8,5 +8,5 @@ class {{ class_name }}(models.Model):
     {%- if inherit_from %}
     _inherit = "{{ inherit_from }}"{% endif %}
     _description = "{{ description }}"
-{% for field in model_fields %}
-    {{ field }} = fields.{{ model_fields[field] }}(){% endfor %}
+{% if model_fields %}{% for field in model_fields %}
+    {{ field }} = fields.{{ model_fields[field] }}(){% endfor %}{% endif %}

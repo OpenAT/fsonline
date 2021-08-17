@@ -8,8 +8,8 @@
             <form string="{{ pretty_name }}">
                 <sheet>
                     <group>
-                        {%- for field in model_fields %}
-                        <field name="{{ field }}" />{% endfor %}
+                        {% if model_fields %}{%- for field in model_fields %}
+                        <field name="{{ field }}" />{% endfor %}{% endif %}
                     </group>
                 </sheet>
             </form>
@@ -21,8 +21,8 @@
         <field name="model">{{ model_name }}</field>
         <field name="arch" type="xml">
             <tree string="{{ pretty_name }}">
-                {%- for field in model_fields %}
-                <field name="{{ field }}" />{% endfor %}
+                {% if model_fields %}{%- for field in model_fields %}
+                <field name="{{ field }}" />{% endfor %}{% endif %}
             </tree>
         </field>
     </record>
@@ -32,8 +32,8 @@
         <field name="model">{{ model_name }}</field>
         <field name="arch" type="xml">
             <search string="{{ pretty_name }}">
-                {%- for field in model_fields %}
-                <field name="{{ field }}" />{% endfor %}
+                {% if model_fields %}{%- for field in model_fields %}
+                <field name="{{ field }}" />{% endfor %}{% endif %}
             </search>
         </field>
     </record>
