@@ -11,10 +11,6 @@ from tools.env_settings import fsonline_env
 # Logging setup
 # -------------
 logger = logging.getLogger(__name__)
-log_handler = logging.StreamHandler()
-log_formatter = logging.Formatter("%(name)s %(levelname)s: %(message)s")
-log_handler.setFormatter(log_formatter)
-logger.addHandler(log_handler)
 LOG_LEVELS = frozenset({"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"})
 
 # Get the loglevel from the environment
@@ -27,7 +23,13 @@ else:
     if _log_level:
         logger.warning("Wrong value in $LOG_LEVEL, falling back to INFO")
     _log_level = logging.INFO
-logger.setLevel(_log_level)
+
+# Set global logger config
+logging.basicConfig(
+    format="%(name)s %(levelname)s: %(message)s",
+    level=_log_level
+)
+
 logger.info(f"Logging initialized in {Path(__file__)}")
 
 
