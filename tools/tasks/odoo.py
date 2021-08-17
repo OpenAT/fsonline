@@ -13,7 +13,7 @@ def create_addon(c, name, core=False, minimal=False):
     if not e.inst_dir:
         core = True
 
-    template_src = e.core_dir / 'tools' / 'copier-templates' / 'odoo_module'
+    template_src = e.core_dir / 'tools' / 'copier-templates' / 'odoo_addon'
     target_dir = e.inst_addon_src  # TODO: Test
 
     if core:
