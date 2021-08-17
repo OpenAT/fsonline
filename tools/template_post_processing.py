@@ -1,8 +1,8 @@
+import re
 import sys
 import logging
 from pathlib import Path
-from typing import List
-
+from typing import List, Pattern, AnyStr
 
 logging.basicConfig(
     format="%(name)s %(levelname)s: %(message)s",
@@ -77,6 +77,25 @@ class CopierPostProcessing:
         self.ensure_file_has_lines(models_init, [f"import {model}\n" for model in models])
         self.ensure_file_has_lines(addon_init, ["import models\n"])
 
+    @staticmethod
+    def create_expression(tag: str) -> Pattern[AnyStr]:
+        return re.compile(fr"(\"{tag}\"|'{tag}')\s*:\s\[\s*(.|\n)*\s*]",
+                          re.RegexFlag.I or re.RegexFlag.M)
+
     def modify_manifest(self, data_files: List[str]) -> None:
         _logger.info(f"Attempting to modify manifest for data files: {str(data_files)}")
         manifest_file = Path(self.addon_path) / "manifest.py"
+
+        data_files.sort()
+        new_data = "'data': [\n\t\t" + \
+                   ",\n\t\t".join([f"'{df}'" for df in data_files]) + \
+                   "\n\t]"
+        new_data = new_data.replace("\t", "    ")
+
+        with open(manifest_file, "r+") as file:
+            manifest_content = file.read()
+            data_exp = self.create_expression("data")
+            manifest_content = data_exp.sub(new_data, manifest_content)
+            file.truncate(0)
+            file.seek(0)
+            file.write(manifest_content)
