@@ -61,5 +61,15 @@ def create_model(c, addon, core=False):
         return
 
     args = f"-d addon_name={addon}"
-    shell_command = f"copier \"{template_src}\" \"{target_dir}\" {args}"
-    c.run(shell_command, pty=True)
+    tmp_suffix = "--tmp--"
+    tmp_target_dir = f"{target_dir}{tmp_suffix}"  # Alongside original folder, with suffix
+
+    # Create the template in a temp directory, so copier doesn't
+    # delete the whole addon, if an exception occurs
+    shell_command = f"copier \"{template_src}\" \"{tmp_target_dir}\" {args}"
+
+    if c.run(shell_command, pty=True):
+        try:
+            c.run(f"cp -r -n \"{tmp_target_dir}/.\" \"{target_dir}\"")
+        finally:
+            c.run(f"rm -r \"{tmp_target_dir}\"")
